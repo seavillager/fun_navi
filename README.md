@@ -15,8 +15,8 @@ fun naviの施設予約関連スクリプト
 
 ### 何ができて何ができないか
 
-①特定施設（パーティールーム）の２ヶ月先までの空き状況の取得及びcsv出力と②先日付の自分の予約結果の取得ができます。  
-現時点では検索時に以下の画像のように表示されるパーティールーム以外の施設には対応していません（例：ゲストルーム）。また、空き状況や予約結果を抽出するのみで予約の自動化は対応していません。
+①特定施設（パーティールーム）の２ヶ月先までの空き状況の取得及びcsv出力と②先日付の自分の予約結果の取得と③特定施設（パーティルーム）の抽選申し込みができます。  
+現時点では検索時に以下の画像のように表示されるパーティールーム以外の施設には対応していません（例：ゲストルーム）。また、空き状況や予約結果を抽出するのみで抽選申し込み以外の予約の自動化は対応していません。
 ![パーティールームの場合](./img/partyroom.png "パーティールームの場合")
 
 ## 環境
@@ -50,20 +50,33 @@ fun naviの施設予約関連スクリプト
 
     ### 環境変数の一覧
 
+    #### 共通
     | 変数名                 | 役割                                      |
     | ---------------------- | ----------------------------------------- |
     | CHROME_DRIVER_PATH    | ChromeDriverのパス |
     | LOGIN_URL         | fun naviのログインサイトのURL   |
     | USER_ID             | fun naviのログインuser id         |
     | PASSWORD         | fun naviのログインパスワード      |
-    | FACILITY_NAMES             | 空き状況チェック対象の施設名 ※現在パーティルームのみ対応        |
-    | PHONE_NUMBER             | 予約時に記入する緊急連絡先      |
-    | SEARCH_START_DATE             | 空き状況検索開始日                |
-    | SEARCH_END_DATE          | 空き状況検索終了日              |
-    | HOLIDAYS_ONLY                  | 検索対象を日本の土日休日に限定する場合はtrueを指定                  |
-    | EXCLUDED_DATES                  | 検索対象から除外する日程（追加より優先されます）                  |
-    | ADDITIONAL_DATES                  | 検索対象に追加する日程                  |
     | LOG_LEVEL        | ログレベル                   |
+    | PHONE_NUMBER             | 予約時に記入する緊急連絡先      |
+
+    #### 抽選申し込み用
+    | 変数名                 | 役割                                      |
+    | ---------------------- | ----------------------------------------- |
+    | PRR_FACILITY_NAMES             | 抽選申し込み対象の施設名 ※現在パーティルームのみ対応        |
+    | PRR_HOLIDAYS_ONLY                  | 申し込み対象を日本の土日休日に限定する場合はtrueを指定。falseの場合は、2ヶ月後の全日程で申し込み。                  |
+    | PRR_EXCLUDED_DATES                  | 申し込み対象から除外する日程（追加より優先されます）                  |
+    | PRR_ADDITIONAL_DATES                  | 申し込み対象に追加する日程                  |
+
+    #### 空き状況チェック用
+    | 変数名                 | 役割                                      |
+    | ---------------------- | ----------------------------------------- |
+    | PR_FACILITY_NAMES             | 空き状況チェック対象の施設名 ※現在パーティルームのみ対応        |
+    | PR_SEARCH_START_DATE             | 空き状況検索開始日                |
+    | PR_SEARCH_END_DATE          | 空き状況検索終了日              |
+    | PR_HOLIDAYS_ONLY                  | 検索対象を日本の土日休日に限定する場合はtrueを指定                  |
+    | PR_EXCLUDED_DATES                  | 検索対象から除外する日程（追加より優先されます）                  |
+    | PR_ADDITIONAL_DATES                  | 検索対象に追加する日程                  |
 
 ## 使い方
 
@@ -75,9 +88,15 @@ fun naviの施設予約関連スクリプト
 
 2. 予約状況の取得
     ```bash
-    fun_navi_list_reservastion.py
+    python3 fun_navi_list_reservastion.py
     ```
     先日付の自分の予約をcsv形式で出力します。（`existing_reservations.csv`）
+
+3. 抽選申し込み
+    ```bash
+    python3 fun_navi_batch_apply_lottery.py
+    ```
+    `.env`で指定した施設を対象に、2ヶ月後の抽選に申し込み、申し込み結果をcsv形式で出力します。（`reservation_results.csv`）
 
 ## ディレクトリ構成
 
@@ -86,6 +105,7 @@ fun naviの施設予約関連スクリプト
 ├── LICENSE
 ├── README.md                           本ファイル
 ├── fun_navi_availability_check.py      空き状況チェック用スクリプト
+├── fun_navi_batch_apply_lottery.py     抽選申し込み用スクリプト
 ├── fun_navi_common.py                  共通関数用スクリプト
 ├── fun_navi_list_reservation.py        自分の予約抽出用スクリプト
 ├── fun_navi_log.log                    実行ログ（削除してOK）
@@ -96,5 +116,6 @@ fun naviの施設予約関連スクリプト
 
 ## 更新履歴
 
+* 2025/2/2: 抽選申し込み機能追加
 * 2025/1/8: 公開
 

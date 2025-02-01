@@ -15,10 +15,10 @@ logger = configure_logging()
 driver = initialize_driver()
 
 # 環境変数を読み込み
-FACILITY_NAMES = os.getenv("FACILITY_NAMES", "").split(",")
-SEARCH_START_DATE = os.getenv("SEARCH_START_DATE")
-SEARCH_END_DATE = os.getenv("SEARCH_END_DATE")
-HOLIDAYS_ONLY = os.getenv("HOLIDAYS_ONLY", "false").lower() == "true"
+FACILITY_NAMES = os.getenv("PR_FACILITY_NAMES", "").split(",")
+SEARCH_START_DATE = os.getenv("PR_SEARCH_START_DATE")
+SEARCH_END_DATE = os.getenv("PR_SEARCH_END_DATE")
+HOLIDAYS_ONLY = os.getenv("PR_HOLIDAYS_ONLY", "false").lower() == "true"
 
 # 空き状況を記録
 availability_results = {}
@@ -30,8 +30,8 @@ def get_dates_range(start_date, end_date):
     除外日と追加日を考慮する。
     """
     # .env から除外日と追加日を取得
-    excluded_dates = os.getenv("EXCLUDED_DATES", "").split(",")
-    additional_dates = os.getenv("ADDITIONAL_DATES", "").split(",")
+    excluded_dates = os.getenv("PR_EXCLUDED_DATES", "").split(",")
+    additional_dates = os.getenv("PR_ADDITIONAL_DATES", "").split(",")
     
     # 除外日と追加日を datetime オブジェクトに変換
     excluded_dates = {datetime.strptime(date.strip(), "%Y/%m/%d") for date in excluded_dates if date.strip()}

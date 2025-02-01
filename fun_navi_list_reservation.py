@@ -15,7 +15,7 @@ logger = configure_logging()
 driver = initialize_driver()
 
 # 環境変数を読み込み
-FACILITY_NAMES = os.getenv("FACILITY_NAMES", "").split(",")
+FACILITY_NAMES = os.getenv("PR_FACILITY_NAMES", "").split(",")
 
 # 予約履歴を記録
 reservation_results = []
